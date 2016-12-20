@@ -4,17 +4,14 @@ import org.tribot.api.General;
 import org.tribot.api.Timing;
 import org.tribot.api.types.generic.Condition;
 import org.tribot.api2007.Banking;
-import org.tribot.api2007.Interfaces;
 import org.tribot.api2007.Inventory;
 import org.tribot.api2007.NPCs;
 import org.tribot.api2007.Objects;
 import org.tribot.api2007.WebWalking;
-import org.tribot.api2007.types.RSInterface;
 import org.tribot.api2007.types.RSItem;
 import org.tribot.api2007.types.RSNPC;
 import org.tribot.api2007.types.RSObject;
 
-import scripts.TheScript.api.antiban.Antiban;
 import scripts.TheScript.api.conditions.Conditions;
 
 public class Bank {
@@ -48,22 +45,14 @@ public class Bank {
 
 	public static boolean depositBankAll() {
 		if (!Banking.isBankScreenOpen()) {
-			Antiban.getReactionTime();
-			Antiban.sleepReactionTime();
 			if (Banking.openBank()) {
-				Antiban.generateTrackers(Antiban.getWaitingTime());
 				Timing.waitCondition(Conditions.get().bankOpen(), General.random(4000, 7000));
 			}
 		} else {
 			General.sleep(500, 800);
-			if (isBankItemsLoaded()) {
-				Antiban.getReactionTime();
-				Antiban.sleepReactionTime();
-				if (Banking.depositAll() > 0) {
-					Antiban.generateTrackers(Antiban.getWaitingTime());
-					Timing.waitCondition(Conditions.get().inventoryEmpty(), General.random(4000, 7000));
-					return true;
-				}
+			if (Banking.depositAll() > 0) {
+				Timing.waitCondition(Conditions.get().inventoryEmpty(), General.random(4000, 7000));
+				return true;
 			}
 		}
 		return false;
@@ -71,32 +60,24 @@ public class Bank {
 
 	public static boolean withdrawItem(int amount, String itemName) {
 		if (!Banking.isBankScreenOpen()) {
-			Antiban.getReactionTime();
-			Antiban.sleepReactionTime();
 			if (Banking.openBank()) {
-				Antiban.generateTrackers(Antiban.getWaitingTime());
 				Timing.waitCondition(Conditions.get().bankOpen(), General.random(4000, 7000));
 			}
 		} else {
 			General.sleep(500, 800);
 			RSItem[] item = Banking.find(itemName);
-			if (isBankItemsLoaded()) {
-				if (item.length == 0) {
-					return false;
-				}
-				withdraw(amount, itemName);
-				Timing.waitCondition(Conditions.get().haveItem(itemName, amount), General.random(4000, 6000));
+			if (item.length == 0) {
+				return false;
 			}
+			withdraw(amount, itemName);
+			Timing.waitCondition(Conditions.get().haveItem(itemName, amount), General.random(4000, 6000));
 		}
 		return false;
 	}
 
 	private static void withdraw(int amount, String itemName) {
 		if (!Inventory.isFull()) {
-			Antiban.getReactionTime();
-			Antiban.sleepReactionTime();
 			if (Banking.withdraw(amount, itemName)) {
-				Antiban.generateTrackers(Antiban.getWaitingTime());
 				Timing.waitCondition(Conditions.get().haveItem(itemName, amount), General.random(4000, 7000));
 			}
 		} else {
@@ -105,25 +86,25 @@ public class Bank {
 
 	}
 
-	private static int getCurrentBankSpace() {
-		RSInterface amount = Interfaces.get(12, 5);
-		if (amount != null && !amount.isHidden()) {
-			String text = amount.getText();
-			if (text != null) {
-				try {
-					int parse = Integer.parseInt(text);
-					if (parse > 0)
-						return parse;
-				} catch (@SuppressWarnings("unused") NumberFormatException e) {
-					return -1;
-				}
-			}
-		}
-		return -1;
-	}
-
-	private static boolean isBankItemsLoaded() {
-		return getCurrentBankSpace() == Banking.getAll().length;
-	}
+	// private static int getCurrentBankSpace() {
+	// RSInterface amount = Interfaces.get(12, 5);
+	// if (amount != null && !amount.isHidden()) {
+	// String text = amount.getText();
+	// if (text != null) {
+	// try {
+	// int parse = Integer.parseInt(text);
+	// if (parse > 0)
+	// return parse;
+	// } catch (@SuppressWarnings("unused") NumberFormatException e) {
+	// return -1;
+	// }
+	// }
+	// }
+	// return -1;
+	// }
+	//
+	// private static boolean isBankItemsLoaded() {
+	// return getCurrentBankSpace() == Banking.getAll().length;
+	// }
 
 }

@@ -11,10 +11,11 @@ import org.tribot.api2007.NPCs;
 import org.tribot.api2007.PathFinding;
 import org.tribot.api2007.Player;
 import org.tribot.api2007.Skills;
-import org.tribot.api2007.Walking;
 import org.tribot.api2007.Skills.SKILLS;
+import org.tribot.api2007.Walking;
 import org.tribot.api2007.WebWalking;
 import org.tribot.api2007.ext.Filters;
+import org.tribot.api2007.types.RSArea;
 import org.tribot.api2007.types.RSItem;
 import org.tribot.api2007.types.RSNPC;
 import org.tribot.api2007.types.RSNPCDefinition;
@@ -71,20 +72,20 @@ public class Killing {
 		return false;
 	}
 
-	public static RSNPC[] findCombatNPCs(String npcName) {
+	public static RSNPC[] findCombatNPCs(String npcName, RSArea area) {
 		return NPCs.findNearest(new Filter<RSNPC>() {
 			@Override
 			public boolean accept(RSNPC a) {
 				RSNPCDefinition def = a.getDefinition();
 				if (def == null)
 					return false;
-				return def.getName().equals(npcName) && !a.isInCombat();
+				return def.getName().equals(npcName) && !a.isInCombat() && area.contains(a.getPosition());
 			}
 		});
 	}
 
-	public static RSNPC getCombatNPC(String npcName) {
-		RSNPC[] objects = findCombatNPCs(npcName);
+	public static RSNPC getCombatNPC(String npcName, RSArea area) {
+		RSNPC[] objects = findCombatNPCs(npcName, area);
 		if (objects.length > 0) {
 			final RSNPC target = Antiban.selectNextTarget(objects);
 			return target;
@@ -92,8 +93,8 @@ public class Killing {
 		return null;
 	}
 
-	public static void combat(String name) {
-		RSNPC target = getCombatNPC(name);
+	public static void combat(String name, RSArea area) {
+		RSNPC target = getCombatNPC(name, area);
 
 		if (!eatFood()) {
 			if (!Killing.inCombat()) {
@@ -116,7 +117,6 @@ public class Killing {
 
 				}
 			} else {
-
 				Antiban.timedActions();
 				General.sleep(1000, 2000);
 			}

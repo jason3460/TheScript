@@ -7,7 +7,8 @@ public enum npcAreas {
 	CHICKENS_LUMBRIDGE_WEST {
 		@Override
 		public RSArea getArea() {
-			return new RSArea(new RSTile(3193, 3284, 0), new RSTile(3184, 3284, 0));
+			return new RSArea(new RSTile[] { new RSTile(3193, 3285, 0), new RSTile(3192, 3270, 0),
+					new RSTile(3184, 3270, 0), new RSTile(3180, 3288, 0) });
 		}
 
 		@Override

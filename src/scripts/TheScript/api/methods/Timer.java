@@ -31,13 +31,13 @@ public class Timer {
 	}
 
 	public static long getDuration() {
-		// return General.randomLong(900000, 1800000);
-		return General.randomLong(60000, 180000);
+		return General.randomLong(1800000, 3600000);
+		// return General.randomLong(60000, 180000); //Tester
 	}
 
 	public void createTimer() {
 		long duration = getDuration();
-		Main.timer = new Timer(duration);
+		Variables.timer = new Timer(duration);
 	}
 
 }

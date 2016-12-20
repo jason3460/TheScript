@@ -183,7 +183,7 @@ public class Conditions {
 		return new Condition() {
 			@Override
 			public boolean active() {
-				return Inventory.getAll().length != count;
+				return Inventory.getAll().length > count;
 			}
 		};
 	}

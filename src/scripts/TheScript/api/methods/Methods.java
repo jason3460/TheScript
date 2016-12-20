@@ -10,8 +10,8 @@ import org.tribot.api2007.Inventory;
 import org.tribot.api2007.PathFinding;
 import org.tribot.api2007.Player;
 import org.tribot.api2007.Skills;
-import org.tribot.api2007.WebWalking;
 import org.tribot.api2007.Skills.SKILLS;
+import org.tribot.api2007.WebWalking;
 import org.tribot.api2007.types.RSArea;
 import org.tribot.api2007.types.RSGroundItem;
 import org.tribot.api2007.types.RSItem;
@@ -19,8 +19,14 @@ import org.tribot.api2007.types.RSItemDefinition;
 import org.tribot.api2007.types.RSTile;
 
 import scripts.TheScript.api.antiban.Antiban;
+import scripts.TheScript.variables.Variables;
 
 public class Methods {
+
+	public static <T extends Enum<?>> T randomEnum(Class<T> enumClass) {
+		int x = Variables.random.nextInt(enumClass.getEnumConstants().length);
+		return enumClass.getEnumConstants()[x];
+	}
 
 	public static boolean checkLevel(SKILLS skill, int level) {
 		int currentLvl = Skills.getActualLevel(skill);
@@ -75,6 +81,15 @@ public class Methods {
 				return Player.getPosition().distanceTo(tile) < 3;
 			}
 		}, General.random(8000, 9000));
+	}
+
+	public static void getRandomLocation() {
+		Methods.debug("Getting random area");
+		int random = General.random(0, Variables.locations.size() - 1);
+		RSArea[] areas = Variables.locations.keySet().toArray(new RSArea[Variables.locations.size()]);
+		Variables.randomArea = areas[random];
+		if (Variables.randomArea != null)
+			Variables.randomAreaWalkTile = Variables.locations.get(Variables.randomArea);
 	}
 
 	public static boolean pickUpGroundItem(String item) {

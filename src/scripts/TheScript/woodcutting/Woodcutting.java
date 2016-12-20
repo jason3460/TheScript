@@ -1,8 +1,6 @@
 
 package scripts.TheScript.woodcutting;
 
-import java.util.LinkedHashMap;
-
 import org.tribot.api.General;
 import org.tribot.api.Timing;
 import org.tribot.api.input.Mouse;
@@ -19,7 +17,6 @@ import org.tribot.api2007.Skills.SKILLS;
 import org.tribot.api2007.types.RSArea;
 import org.tribot.api2007.types.RSObject;
 import org.tribot.api2007.types.RSPlayer;
-import org.tribot.api2007.types.RSTile;
 
 import scripts.TheScript.api.antiban.Antiban;
 import scripts.TheScript.api.conditions.Conditions;
@@ -36,14 +33,6 @@ public class Woodcutting {
 		NORMAL, OAK, WILLOW, MAPLE, YEW;
 	};
 
-	public static RSArea randomArea = null;
-	public static RSTile randomAreaWalkTile = null;
-	public static LinkedHashMap<RSArea, RSTile> locations = new LinkedHashMap<RSArea, RSTile>();
-
-	public static String logName;
-	private static String treeName;
-	private static boolean initialBank = false;
-
 	public static Tree getTree() {
 		int wcLevel = Skills.getActualLevel(SKILLS.WOODCUTTING);
 		if (wcLevel < 15)
@@ -55,15 +44,6 @@ public class Woodcutting {
 		if (wcLevel >= 60)
 			return Tree.YEW;
 		return Tree.NORMAL;
-	}
-
-	private static void getRandomLocation() {
-		Methods.debug("Getting random area");
-		int random = General.random(0, locations.size() - 1);
-		RSArea[] areas = locations.keySet().toArray(new RSArea[locations.size()]);
-		randomArea = areas[random];
-		if (randomArea != null)
-			randomAreaWalkTile = locations.get(randomArea);
 	}
 
 	public static String getAxe() {
@@ -210,58 +190,64 @@ public class Woodcutting {
 	}
 
 	private static void handleTree() {
-		if (locations.size() == 0) {
-			// locations.put(TreeAreas.DRAYNOR_NORMAL_SOUTH.getArea(),
-			// TreeAreas.DRAYNOR_NORMAL_SOUTH.getWalkTile());
-			// locations.put(TreeAreas.DRAYNOR_NORMAL_NORTH.getArea(),
-			// TreeAreas.DRAYNOR_NORMAL_NORTH.getWalkTile());
-			// locations.put(TreeAreas.VARROCK_NORMALS_WEST.getArea(),
-			// TreeAreas.VARROCK_NORMALS_WEST.getWalkTile());
-			locations.put(TreeAreas.VARROCK_NORMALS_SOUTH.getArea(), TreeAreas.VARROCK_NORMALS_SOUTH.getWalkTile());
+		Variables.locations.clear();
+		if (Variables.locations.size() == 0) {
+			Variables.locations.put(TreeAreas.DRAYNOR_NORMAL_SOUTH.getArea(),
+					TreeAreas.DRAYNOR_NORMAL_SOUTH.getWalkTile());
+			Variables.locations.put(TreeAreas.DRAYNOR_NORMAL_NORTH.getArea(),
+					TreeAreas.DRAYNOR_NORMAL_NORTH.getWalkTile());
+			Variables.locations.put(TreeAreas.VARROCK_NORMALS_WEST.getArea(),
+					TreeAreas.VARROCK_NORMALS_WEST.getWalkTile());
+			Variables.locations.put(TreeAreas.VARROCK_NORMALS_SOUTH.getArea(),
+					TreeAreas.VARROCK_NORMALS_SOUTH.getWalkTile());
 			if (combatLevel() >= 10) {
-				locations.put(TreeAreas.LUMBRIDGE_NORMALS_WEST.getArea(),
+				Variables.locations.put(TreeAreas.LUMBRIDGE_NORMALS_WEST.getArea(),
 						TreeAreas.LUMBRIDGE_NORMALS_WEST.getWalkTile());
 			}
 			Methods.debug("Adding normal trees");
 		}
-		treeName = TreeTypes.NORMAL.getName();
-		logName = TreeTypes.NORMAL.getLogs();
-		doWoodcutting(treeName);
+		Variables.treeName = TreeTypes.NORMAL.getName();
+		Variables.logName = TreeTypes.NORMAL.getLogs();
+		doWoodcutting(Variables.treeName);
 	}
 
 	private static void handleOak() {
-		if (locations.size() == 0) {
-			locations.put(TreeAreas.DRAYNOR_NORMAL_SOUTH.getArea(), TreeAreas.DRAYNOR_NORMAL_SOUTH.getWalkTile());
-			locations.put(TreeAreas.DRAYNOR_NORMAL_NORTH.getArea(), TreeAreas.DRAYNOR_NORMAL_NORTH.getWalkTile());
-			locations.put(TreeAreas.VARROCK_NORMALS_WEST.getArea(), TreeAreas.VARROCK_NORMALS_WEST.getWalkTile());
+		Variables.locations.clear();
+		if (Variables.locations.size() == 0) {
+			Variables.locations.put(TreeAreas.DRAYNOR_NORMAL_SOUTH.getArea(),
+					TreeAreas.DRAYNOR_NORMAL_SOUTH.getWalkTile());
+			Variables.locations.put(TreeAreas.DRAYNOR_NORMAL_NORTH.getArea(),
+					TreeAreas.DRAYNOR_NORMAL_NORTH.getWalkTile());
+			Variables.locations.put(TreeAreas.VARROCK_NORMALS_WEST.getArea(),
+					TreeAreas.VARROCK_NORMALS_WEST.getWalkTile());
 			if (combatLevel() >= 10) {
-				locations.put(TreeAreas.LUMBRIDGE_NORMALS_WEST.getArea(),
+				Variables.locations.put(TreeAreas.LUMBRIDGE_NORMALS_WEST.getArea(),
 						TreeAreas.LUMBRIDGE_NORMALS_WEST.getWalkTile());
 			}
 			Methods.debug("Adding oak trees");
 		}
-		treeName = TreeTypes.NORMAL.getName();
-		logName = TreeTypes.NORMAL.getLogs();
-		doWoodcutting(treeName);
+		Variables.treeName = TreeTypes.NORMAL.getName();
+		Variables.logName = TreeTypes.NORMAL.getLogs();
+		doWoodcutting(Variables.treeName);
 	}
 
 	private static void handleWillow() {
-
+		Variables.locations.clear();
 	}
 
 	private static void handleMaple() {
-
+		Variables.locations.clear();
 	}
 
 	private static void handleYew() {
-
+		Variables.locations.clear();
 	}
 
 	public static void doWoodcutting(String treeName) {
 
 		if (ready()) {
 			if (Methods.checkInventory(getAxe())) {
-				if (Methods.inArea(randomArea)) {
+				if (Methods.inArea(Variables.randomArea)) {
 					Variables.miniState = "at trees";
 					if (Inventory.isFull() && Variables.doPowerChop) {
 						if (drop()) {
@@ -273,7 +259,7 @@ public class Woodcutting {
 						Bank.walkToBank();
 					} else {
 						Variables.miniState = "cutting trees";
-						chop(treeName, randomArea);
+						chop(treeName, Variables.randomArea);
 					}
 				} else if (Bank.isInBank()) {
 					Variables.miniState = "in bank";
@@ -282,7 +268,7 @@ public class Woodcutting {
 						handleBank();
 					} else {
 						Variables.miniState = "walking to trees";
-						Methods.walkToTile(randomAreaWalkTile);
+						Methods.walkToTile(Variables.randomAreaWalkTile);
 					}
 
 				} else {
@@ -291,28 +277,28 @@ public class Woodcutting {
 						Bank.walkToBank();
 					} else {
 						Variables.miniState = "walking to trees";
-						Methods.walkToTile(randomAreaWalkTile);
+						Methods.walkToTile(Variables.randomAreaWalkTile);
 					}
 
 				}
 			} else {
 				Methods.debug("getting axe");
 				if (Bank.isInBank()) {
-					Antiban.getReactionTime();
+					if (!Banking.isBankScreenOpen()) {
+						Banking.openBank();
+					}
 					Variables.miniState = "withdrawing axe";
-					if (!Methods.checkInventory(getAxe())) {
-						Antiban.sleepReactionTime();
+					if (!Methods.checkInventory(getAxe()) || Inventory.getAll().length > 0) {
 						Banking.depositAll();
 					}
-					Antiban.sleepReactionTime();
 					Bank.withdrawItem(1, getAxe());
 				} else {
 					Variables.miniState = "going to get axe";
 					Bank.walkToBank();
 				}
 			}
-		} else if (locations.size() > 0) {
-			getRandomLocation();
+		} else if (Variables.locations.size() > 0) {
+			Methods.getRandomLocation();
 		}
 
 	}
@@ -344,9 +330,9 @@ public class Woodcutting {
 		Variables.miniState = "Initial Bank";
 
 		if (Bank.isInBank()) {
-			if (Bank.depositBankAll()) {
+			if (Bank.depositBankAll() && Banking.depositEquipment()) {
 				Bank.withdrawItem(1, getAxe());
-				initialBank = true;
+				Variables.initialBank = true;
 			}
 		} else {
 			Bank.walkToBank();
@@ -354,11 +340,11 @@ public class Woodcutting {
 	}
 
 	private static boolean ready() {
-		return randomArea != null && randomAreaWalkTile != null;
+		return Variables.randomArea != null && Variables.randomAreaWalkTile != null;
 	}
 
 	public static void handleWoodcutting() {
-		if (initialBank != false) {
+		if (Variables.initialBank != false) {
 			doInitialBank();
 		} else {
 			switch (getTree()) {

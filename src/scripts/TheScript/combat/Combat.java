@@ -1,6 +1,5 @@
 package scripts.TheScript.combat;
 
-import org.tribot.api2007.Inventory;
 import org.tribot.api2007.Skills.SKILLS;
 
 import scripts.TheScript.api.methods.Gear;
@@ -34,23 +33,22 @@ public class Combat {
 
 	public static void handleCombat() {
 
-			switch (getMonster()) {
-			case CHICKEN:
-				Variables.miniState = "chickens till 10";
-				if (Gear.isAllEquiped(Variables.IRON_GEAR) && Inventory.getAll().length > 0) {
-					Chicken.handleChickens();
-				} else {
-					Variables.miniState = "getting gear";
-					Gear.getGear(Variables.IRON_GEAR);
-				}
-				break;
-			default:
-				break;
+		switch (getMonster()) {
+		case CHICKEN:
+			Variables.miniState = "chickens till 10";
+			if (!Gear.isAllEquiped(Variables.IRON_GEAR)) {
+				Methods.debug("not all gear equiped.");
+				Gear.getGear(Variables.IRON_GEAR);
+			} else {
+				Chicken.handleChickens();
 			}
+			break;
+		default:
+			break;
 		}
-	
+	}
+
 	private static void doInitialBank() {
-		// TODO Auto-generated method stub
 
 	}
 }

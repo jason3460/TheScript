@@ -14,9 +14,11 @@ import scripts.TheScript.variables.Variables;
 public class Gear {
 
 	public static boolean isAllEquiped(String[] names) {
-		for (String s : names) {
+		for (String name : names) {
+			if (name == names[0])
+				continue;
 			int i = 0;
-			if (i != names.length - 1 && !Equipment.isEquipped(s)) {
+			if (i != names.length - 1 && !Equipment.isEquipped(name)) {
 				return false;
 			}
 		}
@@ -28,54 +30,59 @@ public class Gear {
 	}
 
 	public static boolean haveItems(String[] names) {
-		for (String s : names) {
+		for (String name : names) {
 			int i = 0;
-			if (i != names.length - 1 && haveItem(s)) {
-				return Inventory.getCount(s) > 0;
+			if (i != names.length - 1 && haveItem(name)) {
+				return Inventory.getCount(name) > 0;
 			}
 		}
 		return false;
 	}
 
-	public static void getGear(String[] names) {
+	public static boolean getGear(String[] names) {
 		Variables.miniState = "Getting Task Gear";
 
-		if (!haveItems(names)) {
+		if (!haveItems(names) || isAllEquiped(names)) {
 			if (Bank.isInBank()) {
-				for (String s : names) {
-					int i = 0;
-					if (i != names.length - 1 && !haveItem(s)) {
-						final int count = Inventory.getAll().length;
-						Bank.withdrawItem(1, s);
-						Timing.waitCondition((Conditions.get().inventoryCount(count)), General.random(4000, 6000));
-					}
+				for (String name : names) {
+					Methods.debug(name);
+					Bank.withdrawItem(1, name);
 				}
 			} else {
 				Bank.walkToBank();
 			}
 		} else {
-			equipGear(names);
+			if (equipGear(names)) {
+				return true;
+			}
+
 		}
+		return false;
 	}
 
-	public static void equipGear(String[] names) {
+	public static boolean equipGear(String[] names) {
 
 		Variables.miniState = "equipping gear";
 
-		if (!Banking.isBankScreenOpen()) {
-			if (GameTab.getOpen().equals(TABS.INVENTORY)) {
-				for (String s : names) {
-					if (Inventory.find(s).length > 0) {
-						Inventory.find(s)[0].click("W");
-						Timing.waitCondition((Conditions.get().dontHaveItem(s)), General.random(4000, 6000));
+		if (!isAllEquiped(names)) {
+			if (!Banking.isBankScreenOpen()) {
+				if (GameTab.getOpen().equals(TABS.INVENTORY)) {
+					for (String name : names) {
+						if (Inventory.find(name).length > 0) {
+							Inventory.find(name)[0].click("W");
+							Timing.waitCondition((Conditions.get().dontHaveItem(name)), General.random(4000, 6000));
+						}
 					}
+				} else {
+					GameTab.open(TABS.INVENTORY);
 				}
-
 			} else {
-				GameTab.open(TABS.INVENTORY);
+				Banking.close();
 			}
 		} else {
-			Banking.close();
+			return true;
 		}
+
+		return false;
 	}
 }
