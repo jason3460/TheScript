@@ -1,21 +1,16 @@
-
-package scripts.TheScript.woodcutting;
+package scripts.TheScript.tasks.woodcutting;
 
 import org.tribot.api.General;
 import org.tribot.api.Timing;
 import org.tribot.api.input.Mouse;
 import org.tribot.api2007.Banking;
-import org.tribot.api2007.Camera;
 import org.tribot.api2007.ChooseOption;
-import org.tribot.api2007.Game;
 import org.tribot.api2007.Inventory;
 import org.tribot.api2007.Inventory.DROPPING_PATTERN;
-import org.tribot.api2007.Objects;
 import org.tribot.api2007.Player;
 import org.tribot.api2007.Skills;
 import org.tribot.api2007.Skills.SKILLS;
 import org.tribot.api2007.types.RSArea;
-import org.tribot.api2007.types.RSObject;
 
 import scripts.TheScript.api.antiban.Antiban;
 import scripts.TheScript.api.conditions.Conditions;

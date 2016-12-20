@@ -1,10 +1,10 @@
-package scripts.TheScript.combat;
+package scripts.TheScript.tasks.combat;
 
 import org.tribot.api2007.Skills.SKILLS;
 
 import scripts.TheScript.api.methods.Gear;
 import scripts.TheScript.api.methods.Methods;
-import scripts.TheScript.combat.chicken.Chicken;
+import scripts.TheScript.tasks.combat.chicken.Chicken;
 import scripts.TheScript.variables.Variables;
 
 public class Combat {
@@ -37,7 +37,7 @@ public class Combat {
 			if (!Gear.isAllEquiped(Variables.IRON_GEAR)) {
 				Gear.getGear(Variables.IRON_GEAR);
 			} else {
-				
+
 				Chicken.handleChickens();
 			}
 			break;

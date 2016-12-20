@@ -37,7 +37,7 @@ public class Methods {
 		}
 		return false;
 	}
-	
+
 	public static int checkCombatLevel() {
 		RSPlayer p = Player.getRSPlayer();
 		if (p != null) {
@@ -138,7 +138,7 @@ public class Methods {
 		}
 		return false;
 	}
-	
+
 	public static boolean selectOption(String option) {
 		return ChooseOption.select(option);
 	}

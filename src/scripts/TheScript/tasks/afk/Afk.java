@@ -1,4 +1,4 @@
-package scripts.TheScript.afk;
+package scripts.TheScript.tasks.afk;
 
 import scripts.TheScript.Main;
 import scripts.TheScript.api.methods.Methods;

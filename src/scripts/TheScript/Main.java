@@ -21,14 +21,15 @@ import org.tribot.script.Script;
 import org.tribot.script.ScriptManifest;
 import org.tribot.script.interfaces.Painting;
 
-import scripts.TheScript.afk.Afk;
 import scripts.TheScript.api.antiban.Antiban;
 import scripts.TheScript.api.methods.Methods;
 import scripts.TheScript.api.methods.Timer;
-import scripts.TheScript.combat.Combat;
 import scripts.TheScript.enums.ScriptState;
+import scripts.TheScript.gui.Gui;
+import scripts.TheScript.tasks.afk.Afk;
+import scripts.TheScript.tasks.combat.Combat;
+import scripts.TheScript.tasks.woodcutting.Woodcutting;
 import scripts.TheScript.variables.Variables;
-import scripts.TheScript.woodcutting.Woodcutting;
 
 @ScriptManifest(authors = { "JDog" }, category = "Test", name = "Test")
 public class Main extends Script implements Painting {
@@ -87,7 +88,6 @@ public class Main extends Script implements Painting {
 
 		}
 	}
-
 
 	public static ScriptState getState() {
 		return Methods.randomEnum(ScriptState.class);

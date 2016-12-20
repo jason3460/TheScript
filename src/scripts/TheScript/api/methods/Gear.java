@@ -19,7 +19,7 @@ public class Gear {
 			if (i != names.length - 1 && !Equipment.isEquipped(name)) {
 				return false;
 			}
-		}		
+		}
 		return true;
 	}
 

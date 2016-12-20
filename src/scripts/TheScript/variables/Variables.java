@@ -29,15 +29,13 @@ public class Variables {
 
 	// ----- EQUIPMENT ----- \\
 
-	public static final String[] IRON_GEAR = { "Iron full helm", "Iron platebody", "Iron platelegs",
-			"Iron kiteshield", "Iron scimitar", "Amulet of power", "Leather gloves", "Leather boots", "Green cape" };
+	public static final String[] IRON_GEAR = { "Iron full helm", "Iron platebody", "Iron platelegs", "Iron kiteshield",
+			"Iron scimitar", "Amulet of power", "Leather gloves", "Leather boots", "Green cape" };
 
 	// ----- . ----- \\
-	
-	
+
 	// ----- . ----- \\
-	
-	
+
 	// ----- BANKING ----- \\
 	public static boolean initialBank = false;
 

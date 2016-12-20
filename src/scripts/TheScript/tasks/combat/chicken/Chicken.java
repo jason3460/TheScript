@@ -1,4 +1,4 @@
-package scripts.TheScript.combat.chicken;
+package scripts.TheScript.tasks.combat.chicken;
 
 import org.tribot.api.General;
 import org.tribot.api.Timing;

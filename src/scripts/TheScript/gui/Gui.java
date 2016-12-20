@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package scripts.TheScript;
+package scripts.TheScript.gui;
 
 import java.awt.event.ActionEvent;
 
