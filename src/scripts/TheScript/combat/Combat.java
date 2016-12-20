@@ -9,13 +9,11 @@ import scripts.TheScript.variables.Variables;
 
 public class Combat {
 
-	public enum Monster {
+	private enum Monster {
 		CHICKEN;
 	}
 
-	private static boolean initialBank;
-
-	public static Monster getMonster() {
+	private static Monster getMonster() {
 		int attLevel = Methods.getLevel(SKILLS.ATTACK);
 		int strLevel = Methods.getLevel(SKILLS.STRENGTH);
 		int defLevel = Methods.getLevel(SKILLS.DEFENCE);
@@ -37,9 +35,9 @@ public class Combat {
 		case CHICKEN:
 			Variables.miniState = "chickens till 10";
 			if (!Gear.isAllEquiped(Variables.IRON_GEAR)) {
-				Methods.debug("not all gear equiped.");
 				Gear.getGear(Variables.IRON_GEAR);
 			} else {
+				
 				Chicken.handleChickens();
 			}
 			break;

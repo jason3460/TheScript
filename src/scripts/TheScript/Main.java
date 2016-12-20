@@ -88,6 +88,7 @@ public class Main extends Script implements Painting {
 		}
 	}
 
+
 	public static ScriptState getState() {
 		return Methods.randomEnum(ScriptState.class);
 	}

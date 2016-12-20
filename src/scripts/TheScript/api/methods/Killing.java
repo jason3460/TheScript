@@ -72,7 +72,7 @@ public class Killing {
 		return false;
 	}
 
-	public static RSNPC[] findCombatNPCs(String npcName, RSArea area) {
+	private static RSNPC[] findCombatNPCs(String npcName, RSArea area) {
 		return NPCs.findNearest(new Filter<RSNPC>() {
 			@Override
 			public boolean accept(RSNPC a) {

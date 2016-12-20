@@ -4,6 +4,7 @@ import org.tribot.api.DynamicClicking;
 import org.tribot.api.General;
 import org.tribot.api.Timing;
 import org.tribot.api.types.generic.Condition;
+import org.tribot.api2007.ChooseOption;
 import org.tribot.api2007.Equipment;
 import org.tribot.api2007.GroundItems;
 import org.tribot.api2007.Inventory;
@@ -16,6 +17,7 @@ import org.tribot.api2007.types.RSArea;
 import org.tribot.api2007.types.RSGroundItem;
 import org.tribot.api2007.types.RSItem;
 import org.tribot.api2007.types.RSItemDefinition;
+import org.tribot.api2007.types.RSPlayer;
 import org.tribot.api2007.types.RSTile;
 
 import scripts.TheScript.api.antiban.Antiban;
@@ -34,6 +36,14 @@ public class Methods {
 			return true;
 		}
 		return false;
+	}
+	
+	public static int checkCombatLevel() {
+		RSPlayer p = Player.getRSPlayer();
+		if (p != null) {
+			return p.getCombatLevel();
+		}
+		return 0;
 	}
 
 	public static int getLevel(SKILLS skill) {
@@ -84,7 +94,7 @@ public class Methods {
 	}
 
 	public static void getRandomLocation() {
-		Methods.debug("Getting random area");
+		Variables.miniState = "Getting random location";
 		int random = General.random(0, Variables.locations.size() - 1);
 		RSArea[] areas = Variables.locations.keySet().toArray(new RSArea[Variables.locations.size()]);
 		Variables.randomArea = areas[random];
@@ -127,6 +137,10 @@ public class Methods {
 			return true;
 		}
 		return false;
+	}
+	
+	public static boolean selectOption(String option) {
+		return ChooseOption.select(option);
 	}
 
 	public static void debug(Object message) {

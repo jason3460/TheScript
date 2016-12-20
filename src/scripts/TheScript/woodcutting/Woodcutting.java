@@ -16,11 +16,11 @@ import org.tribot.api2007.Skills;
 import org.tribot.api2007.Skills.SKILLS;
 import org.tribot.api2007.types.RSArea;
 import org.tribot.api2007.types.RSObject;
-import org.tribot.api2007.types.RSPlayer;
 
 import scripts.TheScript.api.antiban.Antiban;
 import scripts.TheScript.api.conditions.Conditions;
 import scripts.TheScript.api.methods.Bank;
+import scripts.TheScript.api.methods.Hover;
 import scripts.TheScript.api.methods.InteractObject;
 import scripts.TheScript.api.methods.Methods;
 import scripts.TheScript.enums.TreeAreas;
@@ -33,7 +33,7 @@ public class Woodcutting {
 		NORMAL, OAK, WILLOW, MAPLE, YEW;
 	};
 
-	public static Tree getTree() {
+	private static Tree getTree() {
 		int wcLevel = Skills.getActualLevel(SKILLS.WOODCUTTING);
 		if (wcLevel < 15)
 			return Tree.NORMAL;
@@ -46,7 +46,7 @@ public class Woodcutting {
 		return Tree.NORMAL;
 	}
 
-	public static String getAxe() {
+	private static String getAxe() {
 		int wcLevel = Methods.getLevel(SKILLS.WOODCUTTING);
 
 		if (wcLevel < 6)
@@ -71,55 +71,6 @@ public class Woodcutting {
 		return "";
 	}
 
-	private static void handleHover(String tree) {
-		if (Antiban.should_open_menu) {
-			if (Variables.printDebug) {
-				Methods.debugABC2("Right clicking next " + tree);
-			}
-			if (hovered(tree)) {
-				Mouse.click(3);
-			} else {
-				if (hover(tree))
-					Timing.waitCondition(Conditions.get().uptext_Contains(tree), General.random(4000, 6000));
-			}
-		} else {
-			if (!hovered(tree)) {
-				if (Variables.printDebug) {
-					Methods.debugABC2("ABC2: Hovering over next " + tree);
-				}
-				if (hover(tree)) {
-					Timing.waitCondition(Conditions.get().uptext_Contains(tree), General.random(4000, 6000));
-				}
-			}
-		}
-	}
-
-	public static boolean hover(String tree) {
-		RSObject[] trees = Objects.findNearest(6, tree);
-		if (trees.length > 1) {
-			for (RSObject t : trees) {
-				if (t.getPosition().distanceTo(Player.getPosition()) > 2) {
-					if (!t.isOnScreen())
-						Camera.turnToTile(trees[1]);
-					else
-						return t.hover();
-				}
-			}
-		}
-		return false;
-	}
-
-	private static boolean hovered(String tree) {
-		String uptext = Game.getUptext();
-		if (uptext == null)
-			return false;
-		return !ChooseOption.isOpen() && uptext.contains(tree);
-	}
-
-	private static boolean selectOption() {
-		return ChooseOption.select("Chop down");
-	}
-
 	private static boolean cut(String tree, RSArea treeArea) {
 		return new InteractObject(false, null, treeArea, 30, tree, "Chop down").click();
 	}
@@ -127,21 +78,21 @@ public class Woodcutting {
 	private static void chop(String treeName, RSArea area) {
 		if (isCutting()) {
 			if (Antiban.should_hover) {
-				handleHover(treeName);
+				Hover.handleHover(treeName);
 			} else {
 				Antiban.timedActions();
 			}
 			Antiban.generateTrackers(Antiban.getWaitingTime());
 		} else {
 			Antiban.getReactionTime();
-			if (hovered(treeName)) {
+			if (Hover.hovered(treeName)) {
 				Mouse.click(1);
 				Antiban.getABCUtil().moveMouse();
 				Timing.waitCondition(Conditions.get().animating(), General.random(3000, 6000));
 				Antiban.sleepReactionTime();
 			} else {
 				if (ChooseOption.isOpen()) {
-					if (selectOption()) {
+					if (Methods.selectOption("Chop down")) {
 						Antiban.getABCUtil().moveMouse();
 						Timing.waitCondition(Conditions.get().animating(), General.random(3000, 6000));
 						Antiban.sleepReactionTime();
@@ -181,14 +132,6 @@ public class Woodcutting {
 		return false;
 	}
 
-	private static int combatLevel() {
-		RSPlayer p = Player.getRSPlayer();
-		if (p != null) {
-			return p.getCombatLevel();
-		}
-		return 0;
-	}
-
 	private static void handleTree() {
 		Variables.locations.clear();
 		if (Variables.locations.size() == 0) {
@@ -200,7 +143,7 @@ public class Woodcutting {
 					TreeAreas.VARROCK_NORMALS_WEST.getWalkTile());
 			Variables.locations.put(TreeAreas.VARROCK_NORMALS_SOUTH.getArea(),
 					TreeAreas.VARROCK_NORMALS_SOUTH.getWalkTile());
-			if (combatLevel() >= 10) {
+			if (Methods.checkCombatLevel() >= 10) {
 				Variables.locations.put(TreeAreas.LUMBRIDGE_NORMALS_WEST.getArea(),
 						TreeAreas.LUMBRIDGE_NORMALS_WEST.getWalkTile());
 			}
@@ -220,10 +163,6 @@ public class Woodcutting {
 					TreeAreas.DRAYNOR_NORMAL_NORTH.getWalkTile());
 			Variables.locations.put(TreeAreas.VARROCK_NORMALS_WEST.getArea(),
 					TreeAreas.VARROCK_NORMALS_WEST.getWalkTile());
-			if (combatLevel() >= 10) {
-				Variables.locations.put(TreeAreas.LUMBRIDGE_NORMALS_WEST.getArea(),
-						TreeAreas.LUMBRIDGE_NORMALS_WEST.getWalkTile());
-			}
 			Methods.debug("Adding oak trees");
 		}
 		Variables.treeName = TreeTypes.NORMAL.getName();
@@ -243,7 +182,7 @@ public class Woodcutting {
 		Variables.locations.clear();
 	}
 
-	public static void doWoodcutting(String treeName) {
+	private static void doWoodcutting(String treeName) {
 
 		if (ready()) {
 			if (Methods.checkInventory(getAxe())) {
@@ -303,7 +242,7 @@ public class Woodcutting {
 
 	}
 
-	public static void handleBank() {
+	private static void handleBank() {
 		if (Banking.isBankScreenOpen()) {
 			Antiban.getReactionTime();
 			if (Methods.checkInventory(getAxe())) {

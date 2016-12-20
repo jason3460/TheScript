@@ -18,6 +18,8 @@ public class Timer {
 		int s = (int) ((duration / 1000) % 60);
 
 		Variables.SCRIPT_STATE = Main.getState();
+		Variables.initialBank = false;
+		Variables.locations.clear();
 		General.println("New Task Created: " + Variables.SCRIPT_STATE);
 		General.println("New Task Timer Created: " + h + ":" + m + ":" + s);
 	}

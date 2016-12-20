@@ -15,21 +15,19 @@ public class Gear {
 
 	public static boolean isAllEquiped(String[] names) {
 		for (String name : names) {
-			if (name == names[0])
-				continue;
 			int i = 0;
 			if (i != names.length - 1 && !Equipment.isEquipped(name)) {
 				return false;
 			}
-		}
+		}		
 		return true;
 	}
 
-	static boolean haveItem(String name) {
+	private static boolean haveItem(String name) {
 		return Inventory.getCount(name) > 0 || Equipment.isEquipped(name);
 	}
 
-	public static boolean haveItems(String[] names) {
+	private static boolean haveItems(String[] names) {
 		for (String name : names) {
 			int i = 0;
 			if (i != names.length - 1 && haveItem(name)) {
