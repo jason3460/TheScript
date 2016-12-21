@@ -114,13 +114,18 @@ public class Main extends Script implements Painting {
 		gg.drawImage(img, 0, 304, null);
 
 		long timeRan = System.currentTimeMillis() - startTime;
+		int h = Variables.timer.getHour();
+		int m = Variables.timer.getMinute();
+		int s = Variables.timer.getSecond();
 
 		gg.setFont(font);
 
 		gg.setColor(Color.RED);
-		gg.drawString("Runtime: " + Timing.msToString(timeRan), 250, 370);
-		gg.drawString("STATE: " + Variables.SCRIPT_STATE, 250, 390);
-		gg.drawString("Mini-State: " + Variables.miniState, 250, 410);
+		gg.drawString("Runtime: " + Timing.msToString(timeRan), 200, 370);
+		gg.drawString("STATE: " + Variables.SCRIPT_STATE, 200, 390);
+		gg.drawString("Mini-State: " + Variables.miniState, 200, 410);
+		
+		gg.drawString("Timer: " + h + ":" + m + ":" + s, 200, 430);
 	}
 
 }

@@ -43,7 +43,7 @@ public class Bank {
 		return bankers[0].isOnScreen();
 	}
 
-	public static boolean depositBankAll() {
+	public static boolean depositAllInventory() {
 		if (!Banking.isBankScreenOpen()) {
 			if (Banking.openBank()) {
 				Timing.waitCondition(Conditions.get().bankOpen(), General.random(4000, 7000));
@@ -52,6 +52,21 @@ public class Bank {
 			General.sleep(500, 800);
 			if (Banking.depositAll() > 0) {
 				Timing.waitCondition(Conditions.get().inventoryEmpty(), General.random(4000, 7000));
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	public static boolean depositAllEquipment() {
+		if (!Banking.isBankScreenOpen()) {
+			if (Banking.openBank()) {
+				Timing.waitCondition(Conditions.get().bankOpen(), General.random(4000, 7000));
+			}
+		} else {
+			General.sleep(500, 800);
+			if (Banking.depositEquipment()) {
+				Timing.waitCondition(Conditions.get().equipmentEmpty(), General.random(4000, 7000));
 				return true;
 			}
 		}

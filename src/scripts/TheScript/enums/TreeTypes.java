@@ -1,7 +1,7 @@
 package scripts.TheScript.enums;
 
 public enum TreeTypes {
-	NORMAL("Tree", "Logs", 0), OAK("Oak", "Oak logs", 1), WILLOW("Willow", "Willow logs", 2), YEW("Yew", "Yew logs", 3);
+	NORMAL("Tree", "Logs", 0), OAK("Oak", "Oak logs", 1), WILLOW("Willow", "Willow logs", 2), MAPLE("Maple", "Maple logs" , 3), YEW("Yew", "Yew logs", 4);
 
 	private String name;
 	private String logs;

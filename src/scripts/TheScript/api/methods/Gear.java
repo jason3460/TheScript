@@ -13,10 +13,9 @@ import scripts.TheScript.variables.Variables;
 
 public class Gear {
 
-	public static boolean isAllEquiped(String[] names) {
-		for (String name : names) {
-			int i = 0;
-			if (i != names.length - 1 && !Equipment.isEquipped(name)) {
+	public static boolean isAllEquipped(String[] names) {
+		for (int i = 0; i <= names.length - 1; i++) { //String name : names
+			if (i != names.length - 1 && !Equipment.isEquipped(names[i])) {
 				return false;
 			}
 		}
@@ -28,24 +27,27 @@ public class Gear {
 	}
 
 	private static boolean haveItems(String[] names) {
-		for (String name : names) {
-			int i = 0;
-			if (i != names.length - 1 && haveItem(name)) {
-				return Inventory.getCount(name) > 0;
+		for (int i = 0; i <= names.length - 1; i++) {
+			if (i != names.length - 1 && haveItem(names[i])) {
+				return Inventory.getCount(names[i]) > 0;
 			}
 		}
 		return false;
 	}
 
-	public static boolean getGear(String[] names) {
+	public static boolean getTaskGear(String[] names) {
 		Variables.miniState = "Getting Task Gear";
 
-		if (!haveItems(names) || isAllEquiped(names)) {
+		if (!haveItems(names)) {
 			if (Bank.isInBank()) {
-				for (String name : names) {
-					Methods.debug(name);
-					Bank.withdrawItem(1, name);
+				if(Banking.isBankScreenOpen()){
+					for (int i = 0; i <= names.length - 1; i++) {
+					Bank.withdrawItem(1, names[i]);
 				}
+				} else {
+					Banking.openBank();
+				}
+				
 			} else {
 				Bank.walkToBank();
 			}
@@ -53,7 +55,6 @@ public class Gear {
 			if (equipGear(names)) {
 				return true;
 			}
-
 		}
 		return false;
 	}
@@ -62,7 +63,7 @@ public class Gear {
 
 		Variables.miniState = "equipping gear";
 
-		if (!isAllEquiped(names)) {
+		if (!isAllEquipped(names)) {
 			if (!Banking.isBankScreenOpen()) {
 				if (GameTab.getOpen().equals(TABS.INVENTORY)) {
 					for (String name : names) {

@@ -22,6 +22,7 @@ import org.tribot.api2007.types.RSNPCDefinition;
 
 import scripts.TheScript.api.antiban.Antiban;
 import scripts.TheScript.api.conditions.Conditions;
+import scripts.TheScript.variables.Variables;
 
 public class Killing {
 
@@ -93,18 +94,21 @@ public class Killing {
 		return null;
 	}
 
-	public static void combat(String name, RSArea area) {
+	public static void combat(String name, RSArea area, String[] loot) {
 		RSNPC target = getCombatNPC(name, area);
+		
+		Variables.miniState = "in combat method";
 
 		if (!eatFood()) {
 			if (!Killing.inCombat()) {
-				if (target != null) {
+				if (!Methods.pickUpGroundItems(loot)) {
+					if (target != null) {
 					Antiban.getReactionTime();
 					Antiban.sleepReactionTime();
-					if (!target.isOnScreen() && PathFinding.canReach(target, false)) {
-						Walking.blindWalkTo(target);
+					if (!target.isOnScreen() && PathFinding.canReach(target, true)) {
+						Walking.clickTileMS(target, 1);
 					}
-					if (!target.isOnScreen() || !PathFinding.canReach(target, false)) {
+					if (!target.isOnScreen() || !PathFinding.canReach(target, true)) {
 						WebWalking.walkTo(target);
 					}
 					if (!target.isClickable()) {
@@ -116,6 +120,8 @@ public class Killing {
 					}
 
 				}
+				}
+				
 			} else {
 				Antiban.timedActions();
 				General.sleep(1000, 2000);

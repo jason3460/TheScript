@@ -1,8 +1,10 @@
 package scripts.TheScript.api.conditions;
 
+import org.tribot.api.General;
 import org.tribot.api.types.generic.Condition;
 import org.tribot.api2007.Banking;
 import org.tribot.api2007.Combat;
+import org.tribot.api2007.Equipment;
 import org.tribot.api2007.Game;
 import org.tribot.api2007.Interfaces;
 import org.tribot.api2007.Inventory;
@@ -178,6 +180,15 @@ public class Conditions {
 			}
 		};
 	}
+	
+	public Condition inventoryItemCount(String name, int count) {
+		return new Condition() {
+			@Override
+			public boolean active() {
+				return Inventory.getCount(name) != count;
+			}
+		};
+	}
 
 	public Condition inventoryCount(int count) {
 		return new Condition() {
@@ -188,4 +199,22 @@ public class Conditions {
 		};
 	}
 
+	public Condition playerDistanceToTile(RSTile tile, int i) {
+		return new Condition() {
+			@Override
+			public boolean active() {
+				General.sleep(200, 300);
+				return Player.getPosition().distanceTo(tile) < i;
+			}
+		};
+	}
+
+	public Condition equipmentEmpty() {
+			return new Condition() {
+				@Override
+				public boolean active() {
+					return Equipment.getItems() == null;
+				}
+			};
+		}
 }

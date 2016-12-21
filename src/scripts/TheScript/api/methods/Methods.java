@@ -3,7 +3,6 @@ package scripts.TheScript.api.methods;
 import org.tribot.api.DynamicClicking;
 import org.tribot.api.General;
 import org.tribot.api.Timing;
-import org.tribot.api.types.generic.Condition;
 import org.tribot.api2007.ChooseOption;
 import org.tribot.api2007.Equipment;
 import org.tribot.api2007.GroundItems;
@@ -21,6 +20,7 @@ import org.tribot.api2007.types.RSPlayer;
 import org.tribot.api2007.types.RSTile;
 
 import scripts.TheScript.api.antiban.Antiban;
+import scripts.TheScript.api.conditions.Conditions;
 import scripts.TheScript.variables.Variables;
 
 public class Methods {
@@ -84,26 +84,22 @@ public class Methods {
 	public static boolean walkToTile(RSTile tile) {
 		if (!WebWalking.walkTo(tile))
 			return false;
-		return Timing.waitCondition(new Condition() {
-			@Override
-			public boolean active() {
-				General.sleep(200, 300);
-				return Player.getPosition().distanceTo(tile) < 3;
-			}
-		}, General.random(8000, 9000));
+		return Timing.waitCondition(Conditions.get().playerDistanceToTile(tile, 5), General.random(8000, 9000));
 	}
 
-	public static void getRandomLocation() {
+	public static void getRandomLocation(RSArea[] areas, RSTile[] tiles) {
 		Variables.miniState = "Getting random location";
-		int random = General.random(0, Variables.locations.size() - 1);
-		RSArea[] areas = Variables.locations.keySet().toArray(new RSArea[Variables.locations.size()]);
+		int random = Variables.random.nextInt(areas.length);
 		Variables.randomArea = areas[random];
-		if (Variables.randomArea != null)
-			Variables.randomAreaWalkTile = Variables.locations.get(Variables.randomArea);
+		if (Variables.randomArea != null){
+			Variables.randomAreaWalkTile = tiles[random];
+			Methods.debug(Variables.randomArea.toString());
+			Methods.debug(Variables.randomAreaWalkTile);
+		}
 	}
 
-	public static boolean pickUpGroundItem(String item) {
-		RSGroundItem[] loot = GroundItems.findNearest(item);
+	public static boolean pickUpGroundItems(String[] items) {
+		RSGroundItem[] loot = GroundItems.findNearest(items);
 		if (loot.length > 0 && loot[0] != null && (loot[0].getPosition().distanceTo(Player.getPosition()) <= 5)) {
 			if (loot[0].isOnScreen() && !Player.isMoving() && PathFinding.canReach(loot[0], true)) {
 				RSItemDefinition def = loot[0].getDefinition();
@@ -114,13 +110,7 @@ public class Methods {
 						Antiban.getReactionTime();
 						Antiban.sleepReactionTime();
 						DynamicClicking.clickRSGroundItem(loot[0], "Take " + name);
-						Timing.waitCondition(new Condition() {
-							@Override
-							public boolean active() {
-								General.sleep(250, 500);
-								return Inventory.getCount(name) != before;
-							}
-						}, 2000);
+						Timing.waitCondition(Conditions.get().inventoryItemCount(name, before), General.random(4000, 6000));
 					}
 				}
 			} else if (!Player.isMoving()) {

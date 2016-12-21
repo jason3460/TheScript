@@ -3,7 +3,7 @@ package scripts.TheScript.enums;
 import org.tribot.api2007.types.RSArea;
 import org.tribot.api2007.types.RSTile;
 
-public enum npcAreas {
+public enum NpcAreas {
 	CHICKENS_LUMBRIDGE_WEST {
 		@Override
 		public RSArea getArea() {
@@ -13,7 +13,7 @@ public enum npcAreas {
 
 		@Override
 		public RSTile getWalkTile() {
-			return new RSTile(3193, 3284, 0);
+			return new RSTile(3189, 3281, 0);
 		}
 	};
 

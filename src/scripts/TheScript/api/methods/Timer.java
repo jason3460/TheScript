@@ -31,7 +31,19 @@ public class Timer {
 	public long remainingTime() {
 		return isRunning() ? duration - (System.currentTimeMillis() - startTime) : 0;
 	}
-
+	
+	public int getHour(){
+		return (int) ((duration / 1000) / 3600);
+	}
+	
+	public int getMinute(){
+		return (int) (((duration / 1000) / 60) % 60);
+	}
+	
+	public int getSecond(){
+		return (int) ((duration / 1000) % 60);
+	}
+	
 	public static long getDuration() {
 		return General.randomLong(1800000, 3600000);
 		// return General.randomLong(60000, 180000); //Tester
