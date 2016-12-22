@@ -19,7 +19,14 @@ public class Timer {
 
 		Variables.SCRIPT_STATE = Main.getState();
 		Variables.initialBank = false;
-		Variables.locations.clear();
+		Variables.randomArea = null;
+		Variables.randomAreaWalkTile = null;
+		Variables.tasksComplete++;
+
+		if (Variables.printDebug) {
+			Methods.debug("--- RESETTING VARIABLES ---");
+		}
+
 		General.println("New Task Created: " + Variables.SCRIPT_STATE);
 		General.println("New Task Timer Created: " + h + ":" + m + ":" + s);
 	}
@@ -28,22 +35,14 @@ public class Timer {
 		return System.currentTimeMillis() - startTime < duration;
 	}
 
+	public void endTimer() {
+		this.duration = 0;
+	}
+
 	public long remainingTime() {
 		return isRunning() ? duration - (System.currentTimeMillis() - startTime) : 0;
 	}
-	
-	public int getHour(){
-		return (int) ((duration / 1000) / 3600);
-	}
-	
-	public int getMinute(){
-		return (int) (((duration / 1000) / 60) % 60);
-	}
-	
-	public int getSecond(){
-		return (int) ((duration / 1000) % 60);
-	}
-	
+
 	public static long getDuration() {
 		return General.randomLong(1800000, 3600000);
 		// return General.randomLong(60000, 180000); //Tester

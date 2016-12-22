@@ -82,25 +82,26 @@ public class Methods {
 	}
 
 	public static boolean walkToTile(RSTile tile) {
-		if (!WebWalking.walkTo(tile))
+		if (!WebWalking.walkTo(tile)) {
 			return false;
-		return Timing.waitCondition(Conditions.get().playerDistanceToTile(tile, 5), General.random(8000, 9000));
+		}
+		return true;
 	}
 
 	public static void getRandomLocation(RSArea[] areas, RSTile[] tiles) {
 		Variables.miniState = "Getting random location";
 		int random = Variables.random.nextInt(areas.length);
 		Variables.randomArea = areas[random];
-		if (Variables.randomArea != null){
-			Variables.randomAreaWalkTile = tiles[random];
-			Methods.debug(Variables.randomArea.toString());
-			Methods.debug(Variables.randomAreaWalkTile);
+		if (Variables.randomArea != null) {
+			if (tiles[random] != null) {
+				Variables.randomAreaWalkTile = tiles[random];
+			}
 		}
 	}
 
-	public static boolean pickUpGroundItems(String[] items) {
+	public static boolean pickUpGroundItems(String[] items, RSArea area) {
 		RSGroundItem[] loot = GroundItems.findNearest(items);
-		if (loot.length > 0 && loot[0] != null && (loot[0].getPosition().distanceTo(Player.getPosition()) <= 5)) {
+		if (loot.length > 0 && loot[0] != null && (area.contains(loot[0].getPosition()))) {
 			if (loot[0].isOnScreen() && !Player.isMoving() && PathFinding.canReach(loot[0], true)) {
 				RSItemDefinition def = loot[0].getDefinition();
 				if (def != null) {
@@ -110,7 +111,8 @@ public class Methods {
 						Antiban.getReactionTime();
 						Antiban.sleepReactionTime();
 						DynamicClicking.clickRSGroundItem(loot[0], "Take " + name);
-						Timing.waitCondition(Conditions.get().inventoryItemCount(name, before), General.random(4000, 6000));
+						Timing.waitCondition(Conditions.get().inventoryItemCount(name, before),
+								General.random(4000, 6000));
 					}
 				}
 			} else if (!Player.isMoving()) {

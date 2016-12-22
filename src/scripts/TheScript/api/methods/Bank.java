@@ -13,6 +13,7 @@ import org.tribot.api2007.types.RSNPC;
 import org.tribot.api2007.types.RSObject;
 
 import scripts.TheScript.api.conditions.Conditions;
+import scripts.TheScript.variables.Variables;
 
 public class Bank {
 
@@ -57,7 +58,7 @@ public class Bank {
 		}
 		return false;
 	}
-	
+
 	public static boolean depositAllEquipment() {
 		if (!Banking.isBankScreenOpen()) {
 			if (Banking.openBank()) {
@@ -82,6 +83,8 @@ public class Bank {
 			General.sleep(500, 800);
 			RSItem[] item = Banking.find(itemName);
 			if (item.length == 0) {
+				General.println("Ending Script. Reason: do not have required items: " + itemName);
+				Variables.runScript = false;
 				return false;
 			}
 			withdraw(amount, itemName);

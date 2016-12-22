@@ -1,7 +1,6 @@
 package scripts.TheScript.variables;
 
 import java.security.SecureRandom;
-import java.util.LinkedHashMap;
 
 import org.tribot.api2007.types.RSArea;
 import org.tribot.api2007.types.RSTile;
@@ -20,6 +19,7 @@ public class Variables {
 	public static ScriptState SCRIPT_STATE;
 
 	public static boolean getNewTask = true;
+	public static int tasksComplete = 0;
 
 	public static String miniState = "";
 
@@ -49,5 +49,5 @@ public class Variables {
 	// ----- Random Locations ----- \\
 	public static RSArea randomArea = null;
 	public static RSTile randomAreaWalkTile = null;
-	public static LinkedHashMap<RSArea, RSTile> locations = new LinkedHashMap<RSArea, RSTile>();
+
 }

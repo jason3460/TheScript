@@ -11,7 +11,7 @@ public enum TreeAreas {
 		}
 
 		@Override
-		public RSTile getWalkTile() {
+		public RSTile getTile() {
 			return new RSTile(3169, 3277, 0);
 		}
 
@@ -23,7 +23,7 @@ public enum TreeAreas {
 		}
 
 		@Override
-		public RSTile getWalkTile() {
+		public RSTile getTile() {
 			return new RSTile(3087, 3236, 0);
 		}
 	},
@@ -36,7 +36,7 @@ public enum TreeAreas {
 		}
 
 		@Override
-		public RSTile getWalkTile() {
+		public RSTile getTile() {
 			return new RSTile(3058, 3255, 0);
 		}
 	},
@@ -49,7 +49,7 @@ public enum TreeAreas {
 		}
 
 		@Override
-		public RSTile getWalkTile() {
+		public RSTile getTile() {
 			return new RSTile(3109, 3227, 0);
 		}
 
@@ -62,7 +62,7 @@ public enum TreeAreas {
 		}
 
 		@Override
-		public RSTile getWalkTile() {
+		public RSTile getTile() {
 			return new RSTile(3100, 3301, 0);
 		}
 
@@ -75,7 +75,7 @@ public enum TreeAreas {
 		}
 
 		@Override
-		public RSTile getWalkTile() {
+		public RSTile getTile() {
 			return new RSTile(3191, 3220, 0);
 		}
 	},
@@ -86,7 +86,7 @@ public enum TreeAreas {
 		}
 
 		@Override
-		public RSTile getWalkTile() {
+		public RSTile getTile() {
 			return new RSTile(3192, 3246, 0);
 		}
 	},
@@ -97,7 +97,7 @@ public enum TreeAreas {
 		}
 
 		@Override
-		public RSTile getWalkTile() {
+		public RSTile getTile() {
 			return new RSTile(3171, 3228, 0);
 		}
 	},
@@ -109,7 +109,7 @@ public enum TreeAreas {
 		}
 
 		@Override
-		public RSTile getWalkTile() {
+		public RSTile getTile() {
 			return new RSTile(3164, 3407, 0);
 		}
 	},
@@ -122,7 +122,7 @@ public enum TreeAreas {
 		}
 
 		@Override
-		public RSTile getWalkTile() {
+		public RSTile getTile() {
 			return new RSTile(3164, 3370, 0);
 		}
 	},
@@ -134,12 +134,12 @@ public enum TreeAreas {
 		}
 
 		@Override
-		public RSTile getWalkTile() {
+		public RSTile getTile() {
 			return new RSTile(3204, 3367, 0);
 		}
 	};
 
 	public abstract RSArea getArea();
 
-	public abstract RSTile getWalkTile();
+	public abstract RSTile getTile();
 }

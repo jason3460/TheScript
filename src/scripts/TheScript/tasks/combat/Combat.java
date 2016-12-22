@@ -14,7 +14,9 @@ import scripts.TheScript.api.methods.Bank;
 import scripts.TheScript.api.methods.Gear;
 import scripts.TheScript.api.methods.Killing;
 import scripts.TheScript.api.methods.Methods;
+import scripts.TheScript.enums.GearSets;
 import scripts.TheScript.enums.Monster;
+import scripts.TheScript.enums.MonsterAreas;
 import scripts.TheScript.variables.Variables;
 
 public class Combat {
@@ -37,65 +39,68 @@ public class Combat {
 
 	public static void handleCombat() {
 
-		switch (getMonster()) {
-		case CHICKEN:
-			if (ready()) {
-				doCombat(Monster.CHICKEN.getName(), Variables.randomArea, Variables.randomAreaWalkTile,
-						Monster.CHICKEN.getLoot(), Monster.CHICKEN.getGear());
-			} else {
-				Methods.getRandomLocation(Monster.CHICKEN.getAreas(), Monster.CHICKEN.getTiles());
+		if (Variables.initialBank) {
+			switch (getMonster()) {
+			case CHICKEN:
+				if (ready()) {
+					doCombat(Monster.CHICKEN.getName(), Monster.CHICKEN.getLoot(), GearSets.IRON.getGear());
+				} else {
+					Methods.getRandomLocation(
+							new RSArea[] { MonsterAreas.CHICKENS_LUMBRIDGE_WEST.getArea(),
+									MonsterAreas.CHICKENS_LUMBRIDGE_WEST2.getArea() },
+							new RSTile[] { MonsterAreas.CHICKENS_LUMBRIDGE_WEST.getWalkTile(),
+									MonsterAreas.CHICKENS_LUMBRIDGE_WEST2.getWalkTile() });
+				}
+				break;
+			default:
+				break;
 			}
-			break;
-
-		default:
-			break;
+		} else {
+			doInitialBank();
 		}
+
 	}
 
 	private static boolean ready() {
 		return Variables.randomArea != null && Variables.randomAreaWalkTile != null;
 	}
 
-	public static void doCombat(String name, RSArea area, RSTile tile, String[] loot, String[] gear) {
-		if (Variables.initialBank) {
-			if (Gear.isAllEquipped(gear)) {
-				if (Killing.checkCombatStance(2)) {
-					if (Methods.inArea(area)) {
-						Variables.miniState = "at chickens";
-						if (Inventory.isFull()) {
-							Variables.miniState = "walking to bank";
-							Bank.walkToBank();
-						} else {
-							Variables.miniState = "Killing";
-							Killing.combat(name, area, loot);
-						}
-					} else if (Bank.isInBank()) {
-						Variables.miniState = "in bank";
-						if (Inventory.isFull()) {
-							Variables.miniState = "doing bank";
-							handleBank();
-						} else {
-							Variables.miniState = "walking to chicken area";
-							Methods.walkToTile(tile);
-						}
+	public static void doCombat(String name, String[] loot, String[] gear) {
+		if (Gear.isAllEquipped(gear)) {
+			if (Killing.checkCombatStance(2)) {
+				if (Methods.inArea(Variables.randomArea)) {
+					Variables.miniState = "at " + name;
+					if (Inventory.isFull()) {
+						Variables.miniState = "walking to bank";
+						Bank.walkToBank();
 					} else {
-						if (Inventory.isFull()) {
-							Variables.miniState = "walking to bank";
-							Bank.walkToBank();
-						} else {
-							Variables.miniState = "walking to chicken area";
-							Methods.walkToTile(tile);
-						}
-
+						Variables.miniState = "Killing";
+						Killing.combat(name, Variables.randomArea, loot);
+					}
+				} else if (Bank.isInBank()) {
+					Variables.miniState = "in bank";
+					if (Inventory.isFull()) {
+						Variables.miniState = "doing bank";
+						handleBank();
+					} else {
+						Variables.miniState = "walking to " + name + " area 1";
+						// WebWalking.walkTo(Variables.randomAreaWalkTile);
+						Methods.walkToTile(Variables.randomAreaWalkTile);
+					}
+				} else {
+					if (Inventory.isFull()) {
+						Variables.miniState = "walking to bank";
+						Bank.walkToBank();
+					} else {
+						Variables.miniState = "walking to " + name + " area 2";
+						// WebWalking.walkTo(Variables.randomAreaWalkTile);
+						Methods.walkToTile(Variables.randomAreaWalkTile);
 					}
 				}
-			} else {
-				Gear.getTaskGear(gear);
 			}
 		} else {
-			doInitialBank();
+			Gear.getTaskGear(gear);
 		}
-
 	}
 
 	private static void doInitialBank() {

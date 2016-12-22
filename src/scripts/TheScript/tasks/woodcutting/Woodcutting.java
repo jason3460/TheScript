@@ -21,6 +21,7 @@ import scripts.TheScript.api.methods.Hover;
 import scripts.TheScript.api.methods.InteractObject;
 import scripts.TheScript.api.methods.Methods;
 import scripts.TheScript.enums.Tree;
+import scripts.TheScript.enums.TreeAreas;
 import scripts.TheScript.variables.Variables;
 
 public class Woodcutting {
@@ -117,57 +118,57 @@ public class Woodcutting {
 
 	private static void doWoodcutting(String tree, String log, RSArea area, RSTile tile) {
 
-			if (Methods.checkInventory(getAxe())) {
-				if (Methods.inArea(area)) {
-					Variables.miniState = "at trees";
-					if (Inventory.isFull() && Variables.doPowerChop) {
-						if (drop()) {
-							Timing.waitCondition(Conditions.get().dontHaveItem(log), General.random(3000, 6000));
-						}
+		if (Methods.checkInventory(getAxe())) {
+			if (Methods.inArea(area)) {
+				Variables.miniState = "at " + tree + "'s";
+				if (Inventory.isFull() && Variables.doPowerChop) {
+					if (drop()) {
+						Timing.waitCondition(Conditions.get().dontHaveItem(log), General.random(3000, 6000));
 					}
-					if (Inventory.isFull()) {
-						Variables.miniState = "walking to bank";
-						Bank.walkToBank();
-					} else {
-						Variables.miniState = "cutting trees";
-						chop(tree, area);
-					}
-				} else if (Bank.isInBank()) {
-					Variables.miniState = "in bank";
-					if (Inventory.isFull()) {
-						Variables.miniState = "doing bank";
-						handleBank(log);
-					} else {
-						Variables.miniState = "walking to trees";
-						Methods.walkToTile(tile);
-					}
-
-				} else {
-					if (Inventory.isFull()) {
-						Variables.miniState = "walking to bank";
-						Bank.walkToBank();
-					} else {
-						Variables.miniState = "walking to trees";
-						Methods.walkToTile(tile);
-					}
-
 				}
-			} else {
-				Methods.debug("getting axe");
-				if (Bank.isInBank()) {
-					if (!Banking.isBankScreenOpen()) {
-						Banking.openBank();
-					}
-					Variables.miniState = "withdrawing axe";
-					if (!Methods.checkInventory(getAxe()) || Inventory.getAll().length > 0) {
-						Banking.depositAll();
-					}
-					Bank.withdrawItem(1, getAxe());
-				} else {
-					Variables.miniState = "going to get axe";
+				if (Inventory.isFull()) {
+					Variables.miniState = "walking to bank";
 					Bank.walkToBank();
+				} else {
+					Variables.miniState = "cutting " + tree + "'s";
+					chop(tree, area);
 				}
+			} else if (Bank.isInBank()) {
+				Variables.miniState = "in bank";
+				if (Inventory.isFull()) {
+					Variables.miniState = "doing bank";
+					handleBank(log);
+				} else {
+					Variables.miniState = "walking to " + tree + "'s";
+					Methods.walkToTile(tile);
+				}
+
+			} else {
+				if (Inventory.isFull()) {
+					Variables.miniState = "walking to bank";
+					Bank.walkToBank();
+				} else {
+					Variables.miniState = "walking to " + tree + "'s";
+					Methods.walkToTile(tile);
+				}
+
 			}
+		} else {
+			Methods.debug("getting axe");
+			if (Bank.isInBank()) {
+				if (!Banking.isBankScreenOpen()) {
+					Banking.openBank();
+				}
+				Variables.miniState = "withdrawing axe";
+				if (!Methods.checkInventory(getAxe()) || Inventory.getAll().length > 0) {
+					Banking.depositAll();
+				}
+				Bank.withdrawItem(1, getAxe());
+			} else {
+				Variables.miniState = "going to get axe";
+				Bank.walkToBank();
+			}
+		}
 	}
 
 	private static void handleBank(String log) {
@@ -185,7 +186,7 @@ public class Woodcutting {
 			}
 		}
 	}
-	
+
 	private static void doInitialBank() {
 		Variables.miniState = "Initial Bank";
 		if (Bank.isInBank()) {
@@ -203,37 +204,63 @@ public class Woodcutting {
 	}
 
 	public static void handleWoodcutting() {
+
 		if (Variables.initialBank) {
 			switch (getTree()) {
 			case NORMAL:
 				Variables.miniState = "Normal";
-				if(ready()){
-					doWoodcutting(Tree.NORMAL.getName(), Tree.NORMAL.getLogs(), Variables.randomArea, Variables.randomAreaWalkTile);
-					
+				if (ready()) {
+					doWoodcutting(Tree.NORMAL.getName(), Tree.NORMAL.getLogs(), Variables.randomArea,
+							Variables.randomAreaWalkTile);
+
 				} else {
-					Methods.getRandomLocation(Tree.NORMAL.getAreas(), Tree.NORMAL.getTiles());
+					Methods.getRandomLocation(new RSArea[] { TreeAreas.DRAYNOR_NORMAL_NORTH.getArea(),
+							TreeAreas.DRAYNOR_NORMAL_SOUTH.getArea(), TreeAreas.LUMBRIDGE_NORMALS_WEST.getArea(),
+							TreeAreas.VARROCK_NORMALS_SOUTH.getArea(), TreeAreas.VARROCK_NORMALS_WEST.getArea() },
+
+							new RSTile[] { TreeAreas.DRAYNOR_NORMAL_NORTH.getTile(),
+									TreeAreas.DRAYNOR_NORMAL_SOUTH.getTile(),
+									TreeAreas.LUMBRIDGE_NORMALS_WEST.getTile(),
+									TreeAreas.VARROCK_NORMALS_SOUTH.getTile(),
+									TreeAreas.VARROCK_NORMALS_WEST.getTile() });
 				}
 				break;
+
 			case OAK:
 				Variables.miniState = "Oak";
+				if (ready()) {
+					doWoodcutting(Tree.OAK.getName(), Tree.OAK.getLogs(), Variables.randomArea,
+							Variables.randomAreaWalkTile);
+
+				} else {
+					Methods.getRandomLocation(new RSArea[] { TreeAreas.DRAYNOR_OAK_EAST.getArea(),
+							TreeAreas.LUMBRIDGE_OAKS_WEST.getArea(), TreeAreas.VARROCK_OAKS_SOUTH.getArea() },
+
+							new RSTile[] { TreeAreas.DRAYNOR_OAK_EAST.getTile(),
+									TreeAreas.LUMBRIDGE_OAKS_WEST.getTile(), TreeAreas.VARROCK_OAKS_SOUTH.getTile() });
+				}
 				break;
+
 			case WILLOW:
 				Variables.miniState = "Willow";
 				break;
+
 			case MAPLE:
 				Variables.miniState = "Maple";
 				break;
+
 			case YEW:
 				Variables.miniState = "Yew";
 				break;
+
 			default:
 				break;
 			}
 		} else {
-			doInitialBank();	
+			doInitialBank();
 		}
 	}
-	
+
 	private static boolean ready() {
 		return Variables.randomArea != null && Variables.randomAreaWalkTile != null;
 	}

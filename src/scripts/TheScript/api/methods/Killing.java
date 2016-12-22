@@ -96,36 +96,46 @@ public class Killing {
 
 	public static void combat(String name, RSArea area, String[] loot) {
 		RSNPC target = getCombatNPC(name, area);
-		
+
 		Variables.miniState = "in combat method";
 
 		if (!eatFood()) {
-			if (!Killing.inCombat()) {
-				if (!Methods.pickUpGroundItems(loot)) {
-					if (target != null) {
-					Antiban.getReactionTime();
-					Antiban.sleepReactionTime();
-					if (!target.isOnScreen() && PathFinding.canReach(target, true)) {
-						Walking.clickTileMS(target, 1);
-					}
-					if (!target.isOnScreen() || !PathFinding.canReach(target, true)) {
-						WebWalking.walkTo(target);
-					}
-					if (!target.isClickable()) {
-						Camera.turnToTile(target);
-					}
-					if (DynamicClicking.clickRSNPC(target, "Attack")) {
-						Antiban.generateTrackers(Antiban.getWaitingTime());
-						Timing.waitCondition(Conditions.get().playerInCombat(), General.random(4000, 7000));
+			if (!Methods.checkInventory("bones")) {
+				if (!Killing.inCombat()) {
+					if (!Methods.pickUpGroundItems(loot, area)) {
+						if (target != null) {
+							Antiban.getReactionTime();
+							Antiban.sleepReactionTime();
+							if (!target.isOnScreen() && PathFinding.canReach(target, true)) {
+								Walking.clickTileMS(target, 1);
+							}
+							if (!target.isOnScreen() || !PathFinding.canReach(target, true)) {
+								WebWalking.walkTo(target);
+							}
+							if (!target.isClickable()) {
+								Camera.turnToTile(target);
+							}
+							if (DynamicClicking.clickRSNPC(target, "Attack")) {
+								Antiban.generateTrackers(Antiban.getWaitingTime());
+								Timing.waitCondition(Conditions.get().playerInCombat(), General.random(4000, 7000));
+							}
+
+						}
 					}
 
+				} else {
+					Antiban.timedActions();
+					General.sleep(1000, 2000);
 				}
-				}
-				
 			} else {
-				Antiban.timedActions();
-				General.sleep(1000, 2000);
+				RSItem[] bones = Inventory.find(Filters.Items.actionsContains("Bury"));
+				if (bones.length > 0) {
+					Inventory.find("Bones")[0].click("B");
+					Timing.waitCondition((Conditions.get().dontHaveItem("Bones")), General.random(2000, 4000));
+				}
+
 			}
 		}
+
 	}
 }

@@ -64,26 +64,26 @@ public class Main extends Script implements Painting {
 		Variables.SCRIPT_STATE = getState();
 
 		while (Variables.runScript) {
-			if (!Variables.timer.isRunning()) {
-				General.println("Task Ended. Creating New Task.");
-				Variables.timer.createTimer();
-			} else {
-				switch (Variables.SCRIPT_STATE) {
-				case CHICKENS:
-					Combat.handleCombat();
-					break;
-
-				case WOODCUTTING:
-					Woodcutting.handleWoodcutting();
-					break;
-
-				case AFK:
-					Afk.doAfk();
-					break;
-				default:
-					break;
+			if (!Antiban.activateRun()) {
+				if (!Variables.timer.isRunning()) {
+					General.println("Task Ended. Creating New Task.");
+					Variables.timer.createTimer();
+				} else {
+					switch (Variables.SCRIPT_STATE) { // Variables.SCRIPT_STATE
+					case CHICKENS:
+						Combat.handleCombat();
+						break;
+					case WOODCUTTING:
+						Woodcutting.handleWoodcutting();
+						break;
+					case AFK:
+						Afk.doAfk();
+						break;
+					default:
+						break;
+					}
+					sleep(50, 75);
 				}
-				sleep(50, 75);
 			}
 
 		}
@@ -114,9 +114,8 @@ public class Main extends Script implements Painting {
 		gg.drawImage(img, 0, 304, null);
 
 		long timeRan = System.currentTimeMillis() - startTime;
-		int h = Variables.timer.getHour();
-		int m = Variables.timer.getMinute();
-		int s = Variables.timer.getSecond();
+
+		long duration = Variables.timer.remainingTime();
 
 		gg.setFont(font);
 
@@ -124,8 +123,10 @@ public class Main extends Script implements Painting {
 		gg.drawString("Runtime: " + Timing.msToString(timeRan), 200, 370);
 		gg.drawString("STATE: " + Variables.SCRIPT_STATE, 200, 390);
 		gg.drawString("Mini-State: " + Variables.miniState, 200, 410);
-		
-		gg.drawString("Timer: " + h + ":" + m + ":" + s, 200, 430);
+
+		gg.drawString("Timer: " + Timing.msToString(duration), 200, 430);
+
+		gg.drawString("Tasks Complete: " + (Variables.tasksComplete - 1), 200, 450);
 	}
 
 }

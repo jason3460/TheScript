@@ -180,7 +180,7 @@ public class Conditions {
 			}
 		};
 	}
-	
+
 	public Condition inventoryItemCount(String name, int count) {
 		return new Condition() {
 			@Override
@@ -210,11 +210,11 @@ public class Conditions {
 	}
 
 	public Condition equipmentEmpty() {
-			return new Condition() {
-				@Override
-				public boolean active() {
-					return Equipment.getItems() == null;
-				}
-			};
-		}
+		return new Condition() {
+			@Override
+			public boolean active() {
+				return Equipment.getItems() == null;
+			}
+		};
+	}
 }

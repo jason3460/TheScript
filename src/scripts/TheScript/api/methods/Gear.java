@@ -14,7 +14,7 @@ import scripts.TheScript.variables.Variables;
 public class Gear {
 
 	public static boolean isAllEquipped(String[] names) {
-		for (int i = 0; i <= names.length - 1; i++) { //String name : names
+		for (int i = 0; i <= names.length - 1; i++) { // String name : names
 			if (i != names.length - 1 && !Equipment.isEquipped(names[i])) {
 				return false;
 			}
@@ -40,14 +40,14 @@ public class Gear {
 
 		if (!haveItems(names)) {
 			if (Bank.isInBank()) {
-				if(Banking.isBankScreenOpen()){
+				if (Banking.isBankScreenOpen()) {
 					for (int i = 0; i <= names.length - 1; i++) {
-					Bank.withdrawItem(1, names[i]);
-				}
+						Bank.withdrawItem(1, names[i]);
+					}
 				} else {
 					Banking.openBank();
 				}
-				
+
 			} else {
 				Bank.walkToBank();
 			}

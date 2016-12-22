@@ -105,9 +105,11 @@ public class Gui extends javax.swing.JFrame {
 		pack();
 	}// </editor-fold>
 
+	@SuppressWarnings("unused")
 	protected void doPowerChopActionPerformed(ActionEvent evt) {
 	}
 
+	@SuppressWarnings("unused")
 	private void startButtonActionPerformed(java.awt.event.ActionEvent evt) {
 		if (doPowerChop.getSelectedIndex() == 0) {
 			Variables.doPowerChop = true;
