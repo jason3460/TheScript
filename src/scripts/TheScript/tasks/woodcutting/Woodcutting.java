@@ -233,11 +233,9 @@ public class Woodcutting {
 							Variables.randomAreaWalkTile);
 
 				} else {
-					Methods.getRandomLocation(new RSArea[] { TreeAreas.DRAYNOR_OAK_EAST.getArea(),
-							TreeAreas.LUMBRIDGE_OAKS_WEST.getArea(), TreeAreas.VARROCK_OAKS_SOUTH.getArea() },
+					Methods.getRandomLocation(new RSArea[] { TreeAreas.LUMBRIDGE_OAKS_WEST.getArea(), TreeAreas.VARROCK_OAKS_SOUTH.getArea() },
 
-							new RSTile[] { TreeAreas.DRAYNOR_OAK_EAST.getTile(),
-									TreeAreas.LUMBRIDGE_OAKS_WEST.getTile(), TreeAreas.VARROCK_OAKS_SOUTH.getTile() });
+							new RSTile[] { TreeAreas.LUMBRIDGE_OAKS_WEST.getTile(), TreeAreas.VARROCK_OAKS_SOUTH.getTile() });
 				}
 				break;
 

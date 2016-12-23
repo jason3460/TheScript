@@ -38,6 +38,7 @@ public class Killing {
 		if (Combat.getSelectedStyleIndex() != stanceID) {
 			Antiban.getReactionTime();
 			setCombatStance(stanceID);
+			Methods.debugABC2("combat stance");
 			Antiban.sleepReactionTime();
 			Inventory.open();
 			return true;
@@ -88,6 +89,7 @@ public class Killing {
 	public static RSNPC getCombatNPC(String npcName, RSArea area) {
 		RSNPC[] objects = findCombatNPCs(npcName, area);
 		if (objects.length > 0) {
+			Methods.debugABC2("We have target");
 			final RSNPC target = Antiban.selectNextTarget(objects);
 			return target;
 		}
@@ -104,18 +106,19 @@ public class Killing {
 				if (!Killing.inCombat()) {
 					if (!Methods.pickUpGroundItems(loot, area)) {
 						if (target != null) {
+							Methods.debugABC2("We have target");
 							Antiban.getReactionTime();
 							Antiban.sleepReactionTime();
-							if (!target.isOnScreen() && PathFinding.canReach(target, true)) {
+							if (!target.isOnScreen() && PathFinding.canReach(target, false)) {
 								Walking.clickTileMS(target, 1);
 							}
-							if (!target.isOnScreen() || !PathFinding.canReach(target, true)) {
+							if (!target.isOnScreen() || !PathFinding.canReach(target, false)) {
 								WebWalking.walkTo(target);
 							}
 							if (!target.isClickable()) {
 								Camera.turnToTile(target);
 							}
-							if (DynamicClicking.clickRSNPC(target, "Attack")) {
+							if (DynamicClicking.clickRSNPC(target, "A")) {
 								Antiban.generateTrackers(Antiban.getWaitingTime());
 								Timing.waitCondition(Conditions.get().playerInCombat(), General.random(4000, 7000));
 							}
@@ -131,9 +134,8 @@ public class Killing {
 				RSItem[] bones = Inventory.find(Filters.Items.actionsContains("Bury"));
 				if (bones.length > 0) {
 					Inventory.find("Bones")[0].click("B");
-					Timing.waitCondition((Conditions.get().dontHaveItem("Bones")), General.random(2000, 4000));
 				}
-
+				Timing.waitCondition((Conditions.get().dontHaveItem("Bones")), General.random(2000, 4000));
 			}
 		}
 

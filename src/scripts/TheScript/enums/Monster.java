@@ -4,7 +4,7 @@ public enum Monster {
 
 	CHICKEN("Chicken", new String[] { "Feather", "Bones" }),
 
-	COW("Chicken", new String[] { "Cow hide", "Bones" });
+	COW("Cow", new String[] { "Cowhide", "Bones" });
 
 	private String name;
 	private String[] loot;

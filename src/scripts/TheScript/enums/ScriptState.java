@@ -1,5 +1,5 @@
 package scripts.TheScript.enums;
 
 public enum ScriptState {
-	WOODCUTTING, CHICKENS, AFK
+	WOODCUTTING, COMBAT, POTATO_PICKER, AFK
 }

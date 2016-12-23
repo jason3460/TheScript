@@ -44,7 +44,7 @@ public class Timer {
 	}
 
 	public static long getDuration() {
-		return General.randomLong(1800000, 3600000);
+		return General.randomLong(1200000, 2400000);
 		// return General.randomLong(60000, 180000); //Tester
 	}
 

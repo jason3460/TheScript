@@ -26,32 +26,56 @@ public class Combat {
 		int strLevel = Methods.getLevel(SKILLS.STRENGTH);
 		int defLevel = Methods.getLevel(SKILLS.DEFENCE);
 
-		if ((attLevel & strLevel & defLevel) < 10)
+		if ((attLevel & strLevel & defLevel) < 5)
 			return Monster.CHICKEN;
-		if ((attLevel & strLevel & defLevel) >= 10 && (attLevel & strLevel & defLevel) < 20)
-			return Monster.CHICKEN;
+		if ((attLevel & strLevel & defLevel) >= 5 && (attLevel & strLevel & defLevel) < 20)
+			return Monster.COW;
 		if ((attLevel & strLevel & defLevel) >= 20 && (attLevel & strLevel & defLevel) < 30)
-			return Monster.CHICKEN;
+			return Monster.COW;
 		if ((attLevel & strLevel & defLevel) >= 30 && (attLevel & strLevel & defLevel) < 40)
-			return Monster.CHICKEN;
+			return Monster.COW;
 		return Monster.CHICKEN;
 	}
 
 	public static void handleCombat() {
 
-		if (Variables.initialBank) {
+		if (Variables.initialBank == false) {
 			switch (getMonster()) {
 			case CHICKEN:
 				if (ready()) {
 					doCombat(Monster.CHICKEN.getName(), Monster.CHICKEN.getLoot(), GearSets.IRON.getGear());
 				} else {
 					Methods.getRandomLocation(
-							new RSArea[] { MonsterAreas.CHICKENS_LUMBRIDGE_WEST.getArea(),
-									MonsterAreas.CHICKENS_LUMBRIDGE_WEST2.getArea() },
-							new RSTile[] { MonsterAreas.CHICKENS_LUMBRIDGE_WEST.getWalkTile(),
-									MonsterAreas.CHICKENS_LUMBRIDGE_WEST2.getWalkTile() });
+							new RSArea[] { 
+									MonsterAreas.CHICKENS_LUMBRIDGE_WEST.getArea(),
+									MonsterAreas.CHICKENS_LUMBRIDGE_WEST2.getArea(),
+									MonsterAreas.CHICKENS_LUMBRIDGE_EAST.getArea()},
+							new RSTile[] { 
+									MonsterAreas.CHICKENS_LUMBRIDGE_WEST.getTile(),
+									MonsterAreas.CHICKENS_LUMBRIDGE_WEST2.getTile(),
+									MonsterAreas.CHICKENS_LUMBRIDGE_EAST.getTile()});
 				}
 				break;
+				
+			case COW:
+				if (ready()) {
+					doCombat(Monster.COW.getName(), Monster.COW.getLoot(), GearSets.STEEL.getGear());
+				} else {
+					Methods.getRandomLocation(
+							new RSArea[] { MonsterAreas.COWS_LUMBRIDGE_WEST.getArea(), MonsterAreas.COWS_LUMBRIDGE_EAST.getArea()},
+							new RSTile[] { MonsterAreas.COWS_LUMBRIDGE_WEST.getTile(), MonsterAreas.COWS_LUMBRIDGE_EAST.getTile()});
+				}
+				break;
+				
+//			case MONSTERNAME:
+//				if (ready()) {
+//					doCombat(Monster.MONSTERNAME.getName(), Monster.MONSTERNAME.getLoot(), GearSets.ARMOURTYPE.getGear());
+//				} else {
+//					Methods.getRandomLocation(
+//							new RSArea[] { MonsterAreas.AREANAME.getArea(), MonsterAreas.AREANAME.getArea()},
+//							new RSTile[] { MonsterAreas.AREANAME.getTile(), MonsterAreas.AREANAME.getTile()});
+//				}
+//				break;
 			default:
 				break;
 			}
@@ -83,7 +107,7 @@ public class Combat {
 						Variables.miniState = "doing bank";
 						handleBank();
 					} else {
-						Variables.miniState = "walking to " + name + " area 1";
+						Variables.miniState = "walking to " + name + " tile";
 						// WebWalking.walkTo(Variables.randomAreaWalkTile);
 						Methods.walkToTile(Variables.randomAreaWalkTile);
 					}
@@ -92,7 +116,7 @@ public class Combat {
 						Variables.miniState = "walking to bank";
 						Bank.walkToBank();
 					} else {
-						Variables.miniState = "walking to " + name + " area 2";
+						Variables.miniState = "walking to " + name + " tile";
 						// WebWalking.walkTo(Variables.randomAreaWalkTile);
 						Methods.walkToTile(Variables.randomAreaWalkTile);
 					}

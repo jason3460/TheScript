@@ -101,7 +101,7 @@ public class Methods {
 
 	public static boolean pickUpGroundItems(String[] items, RSArea area) {
 		RSGroundItem[] loot = GroundItems.findNearest(items);
-		if (loot.length > 0 && loot[0] != null && (area.contains(loot[0].getPosition()))) {
+		if (loot.length > 0 && loot[0] != null && (area.contains(loot[0].getPosition())) && loot[0].getPosition().distanceTo(Player.getPosition()) < 5) {
 			if (loot[0].isOnScreen() && !Player.isMoving() && PathFinding.canReach(loot[0], true)) {
 				RSItemDefinition def = loot[0].getDefinition();
 				if (def != null) {

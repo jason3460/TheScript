@@ -26,12 +26,7 @@ public class Variables {
 	public static final SecureRandom random = new SecureRandom();
 
 	public static Timer timer;
-
-	// ----- EQUIPMENT ----- \\
-
-	public static final String[] IRON_GEAR = { "Iron full helm", "Iron platebody", "Iron platelegs", "Iron kiteshield",
-			"Iron scimitar", "Amulet of power", "Leather gloves", "Leather boots", "Green cape" };
-
+	
 	// ----- . ----- \\
 
 	// ----- . ----- \\
@@ -49,5 +44,8 @@ public class Variables {
 	// ----- Random Locations ----- \\
 	public static RSArea randomArea = null;
 	public static RSTile randomAreaWalkTile = null;
+
+	public static int count = 0;
+	public static int before = 0;
 
 }
